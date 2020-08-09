@@ -1,5 +1,5 @@
-#asgiref==3.2.5
-#cairocffi===file-.cairocffi-VERSION
+asgiref==3.2.5
+cairocffi===file-.cairocffi-VERSION
 CairoSVG==2.4.2
 cffi==1.14.0
 cssselect2==0.3.0
@@ -16,6 +16,7 @@ MarkupSafe==1.1.1
 numpy==1.18.4
 pandas==1.0.4
 Pillow==7.1.2
+psycopg2==2.8.5
 pycparser==2.20
 Pyphen==0.9.5
 python-dateutil==2.8.1

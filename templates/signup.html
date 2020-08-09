@@ -1,0 +1,170 @@
+{% load static %}
+{% include 'statics/style.html' %}
+{% block content %}
+
+<body>
+    <div class="page-wrapper bg-red p-t-180 p-b-100 font-robo">
+        <div class="wrapper wrapper--w960">
+            <div class="card card-2">
+                <div class="card-heading"></div>
+                <div class="card-body">
+                    <h2 class="title">Registration Info</h2>
+                    <form id="Register">
+
+                        <div class="input-group">
+
+                            <input class="input--style-2 .c-error" id="userName" type="text" placeholder="Name " name="userName" required="">
+
+                        </div>
+
+                          <div class="input-group">
+                            <input class="input--style-2" type="text" placeholder="E-mail" name="email" required="">
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <input class="input--style-2 " type="text" id='password' placeholder="Password" name="password" required="">
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group">
+
+                                    <input class="input--style-2 " type="text" id="cnfrmpassword" placeholder="Confirm Password" name="cnfrmpassword" required="">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="p-t-30">
+                            <button class="btn btn--radius btn--green" type="submit">SignUp</button>
+                        </div>
+                    </form>
+                    <div class="p-t-30">
+                            <h4>Already have an account ?<a href="login" style="color:red">Log in</a></h4><br>
+                            <h4>Go to ?<a href="home" style="color:blue">Home</a></h4>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+   {% endblock content %}
+{% include 'statics/script.html' %}
+<script>
+    $('#cnfrmpassword').on('blur',function(){
+    var pass = $('#password').val();
+    console.log($(this).val())
+    if(pass == $(this).val()){
+     $("#cnfrmpassword").css("border-bottom","2px solid green");
+     $("#password").css("border-bottom","2px solid green");
+
+    }else{
+     $("#cnfrmpassword").css("border-bottom","2px solid red");
+     $("#password").css("border-bottom","2px solid red");
+    }
+    })
+    $('#Register').validate({
+        errorClass: 'errors',
+        validClass: "my-valid-class",
+        rules: {
+            userName: {
+                required: true
+            },
+            email: {
+                required: true
+            },
+            password: {
+                required: true
+            },
+            cnfrmpassword: {
+                required: true
+            },
+            errorElement: 'label',
+            errorClass: 'alert',
+            highlight: function (element) {
+                return false;
+            },
+            unhighlight: function (element) {
+                return false;
+            },
+        },
+        messages: {
+            userName: {
+                required: "*Please enter the UserName"
+            },
+            email: {
+                required: "*Please enter the E-mail..!"
+            },
+
+            password: {
+                required: "*Please enter the Password..!"
+            },
+            cnfrmpassword: {
+                required: "*Please enter the Confirm Password..!"
+            },
+
+
+        },
+        submitHandler: function (form) {
+            debugger
+            var datas = $("#Register").serializeArray();
+            var form_data = new FormData();
+            var password = $('#password').val();
+            var cnfrmpassword = $('#cnfrmpassword').val();
+            if (password != cnfrmpassword) {
+                return false
+            }
+             $(datas).each(function (index, obj) {
+                if (obj.value != '') {
+                    form_data.append(obj.name, obj.value);
+                }
+
+            });
+
+            var csrftoken = $('meta[name=csrf-token]').attr('content');
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                }
+            });
+            baseurls = "api/register"
+            $.ajax({
+                url: baseurls,
+                type: 'POST',
+                data: form_data,
+                dataype: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if(data.status == 'pass')
+                    {
+                  swal({
+
+                      title: 'User Successfully Registered .. !',
+                      showConfirmButton: false,
+                      icon: 'success',
+                      timer: 3000
+                    })
+                    location.reload();
+                    }else{
+                    swal({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Something went wrong! try again later',
+                })
+
+                    }
+                }
+            });
+
+
+        }
+    });
+
+</script>

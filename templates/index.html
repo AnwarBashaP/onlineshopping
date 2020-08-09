@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Start Search Popup -->
+
+<!-- Start Slider -->
+    <div id="slides-shop" class="cover-slides">
+        <ul class="slides-container">
+
+			{% for i in BannerImages %}
+
+            <li class="text-center">
+                <img src={{ i }} alt="">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20"><strong>{{ BannerHeading }} </strong></h1>
+                            <p class="m-b-40"> {{ BannerDescription }} </p>
+                            <p><a class="btn hvr-hover" href= {{ BannerLink }}>Shop New</a></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+			{% endfor %}
+        </ul>
+        <div class="slides-navigation">
+            <a href="#" class="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+            <a href="#" class="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <!-- End Slider -->
+
+	 <!-- Start Categories  -->
+     <div class="categories-shop">
+        <div class="container">
+            <div class="row">
+                {% if ProductCat %}
+                {% for i in ProductCat %}
+                <!-- Start Categories  -->
+
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="shop-cat-box">
+
+                        <img class="img-fluid" src={{ i.ProductImage }} alt="" />
+                        <a class="btn hvr-hover" href="{% url 'overallProduct' mainproduct=i.SubProductID %}">{{ i.ProductTitle }}</a>
+                    </div>
+                </div>
+
+
+                {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    <!-- End Categories -->
+            <!--Box Product Ads-->
+            {% if BoxAds %}
+
+
+                <div class="box-add-products">
+
+                    <div class="container">
+                        <div class="row">
+                            {% for data in BoxAds %}
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="offer-box-products">
+                                    <img class="img-fluid" src={{ data.AdImage }} alt="" />
+
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+
+    {% endif %}
+<!--                End Box product Ads-->
+
+{% if SplProduct %}
+    <!-- Start Products  -->
+    <div class="products-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="title-all text-center">
+                        <h1>Special Products List</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="special-menu text-center">
+                        <div class="button-group filter-button-group">
+                            <button class="active" data-filter="*">All</button>
+                            <button data-filter=".tf">Top featured</button>
+                            <button data-filter=".bs">Best seller</button>
+                            <button data-filter=".hd">Hot Deal</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row special-list">
+                {% for i in SplProduct %}
+                <div class="col-lg-3 col-md-6 special-grid {{ i.SplList }}">
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <div class="type-lb">
+                                <p class={{ i.Offer }}>{{ i.Offer }}</p>
+
+                            </div>
+                            <img src={{ i.ProductImage.url }} class="img-fluid" alt="Image">
+                            <div class="mask-icon">
+                                <ul>
+
+                                    <li><a href="{% url 'induvialProduct' product=i.slug  %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                    <li><a class="btn wishlist" data-toggle="tooltip" data-placement="right" data-value={{ i.slug }} title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                </ul>
+                                <button class="btn cart hvr-hover" value={{ i.slug }}>Add to Cart</button>
+                            </div>
+                        </div>
+                        <div class="why-text">
+                            <a href="{% url 'induvialProduct' product=i.slug  %}">
+                            <h4>{{ i.ProductTitle }}</h4>
+                            <p>{% if i.StrikePrice %} <del>{{ i.StrikePrice }}</del> {% endif %}</p>
+                            <h5> {{ i.Price }}   </h5>
+                                </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+{% endblock content %}
+<!-- End Shop Page -->

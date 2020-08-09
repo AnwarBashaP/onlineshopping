@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Start All Title Box -->
+<div class="all-title-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Shop</h2>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Shop</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End All Title Box -->
+
+<!-- Start Shop Page  -->
+<div class="shop-box-inner">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">
+                <div class="right-product-box">
+                    <div class="product-item-filter row">
+                        <div class="col-12 col-sm-8 text-center text-sm-left">
+                            <div class="toolbar-sorter-right">
+                                <span>Sort by </span>
+                                <select id="alternativefilter" class="selectfileds show-tick form-control" >
+                                    <option data-display="Select" value='0'>Nothing</option>
+                                    <option value='1'>High Price → Low Price</option>
+                                    <option value='2'>Low Price → High Price</option>
+                                </select>
+                            </div>
+
+                            <p id="countdata">Showing all {%if count %} {{ count }} {% else%} 0 {% endif %}  results</p>
+                        </div>
+                        <div class="col-12 col-sm-4 text-center text-sm-right">
+                            <ul class="nav nav-tabs ml-auto">
+                                <li>
+                                    <a class="nav-link active" href="#grid-view" data-toggle="tab"> <i
+                                            class="fa fa-th"></i> </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="#list-view" data-toggle="tab"> <i
+                                            class="fa fa-list-ul"></i> </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="product-categorie-box">
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
+                                <div class="row" id="inside-grid-view">
+                                    {% for i in products %}
+
+                                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                        <div class="products-single fix">
+                                            <div class="box-img-hover">
+                                                <div class="type-lb">
+
+                                                    <p class={{ i.Offer }}>{{ i.Offer }}</p>
+                                                </div>
+                                                <img src={{ i.ProductImage.url }} class="img-fluid" alt="Image">
+                                                <div class="mask-icon">
+                                                    <ul>
+                                                        <li><a href="{% url 'induvialProduct' product=i.slug  %}"
+                                                               data-toggle="tooltip" data-placement="right"
+                                                               title="View"><i class="fas fa-eye"></i></a></li>
+                                                        <li><a href="#" data-toggle="tooltip" data-placement="right"
+                                                               title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                                        <li><a class="btn wishlist hvr-hover" href="#" data-toggle="tooltip" data-placement="right"
+                                                                   title="Add to Wishlist" data-value={{ i.slug }}><i class="far fa-heart"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                    <button class="btn cart hvr-hover" value={{ i.slug }}>Add to Cart</button>
+                                                </div>
+                                            </div>
+                                            <div class="why-text">
+                                                <h4>{{ i.ProductTitle }}</h4>
+                                                <h4>
+                                                    <del>{{ i.StrikePrice }}</del>
+                                                </h4>
+                                                <h5> {{ i.Price }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="list-view">
+                                {% for i in products %}
+                                <div class="list-view-box">
+                                    <div class="row">
+
+                                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                                            <div class="products-single fix">
+
+                                                <div class="box-img-hover">
+                                                    <div class="type-lb">
+                                                        <p class={{ i.Offer }}>{{ i.Offer }}</p>
+                                                    </div>
+                                                    <img src={{ i.ProductImage.url }} class="img-fluid" alt="Image">
+                                                    <div class="mask-icon">
+                                                        <ul>
+
+                                                            <li><a href="{% url 'induvialProduct' product=i.slug  %}"
+                                                                   data-toggle="tooltip" data-placement="right"
+                                                                   title="View"><i class="fas fa-eye"></i></a></li>
+                                                            <li><a href="#" data-toggle="tooltip" data-placement="right"
+                                                                   title="Compare"><i class="fas fa-sync-alt"></i></a>
+                                                            </li>
+
+                                                            <li><a class="btn hvr-hover" href="#" data-toggle="tooltip" data-placement="right"
+                                                                   title="Add to Wishlist" data-value={{ i.slug }}><i class="far fa-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
+                                            <div class="why-text full-width">
+                                                <h4>{{ i.ProductTitle }}</h4>
+                                                <h4>
+                                                    <del>{{ i.StrikePrice }}</del>
+                                                </h4>
+                                                <h5> {{ i.Price }}</h5>
+                                                <p>{{ i.Description }}</p>
+                                                <button class="btn cart hvr-hover" value={{ i.slug }}>Add to Cart</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
+                <div class="product-categori">
+                    <div class="search-product">
+
+                            <input id="searchfilters" class="form-control" placeholder="Search here..." type="text">
+                            <button type="button" id="searchbtn"><i class="fa fa-search"></i></button>
+
+                    </div>
+<!--                    <div class="filter-sidebar-left">-->
+<!--                        <div class="title-left">-->
+<!--                            <h3>Categories</h3>-->
+<!--                        </div>-->
+<!--                        <div class="list-group list-group-collapse list-group-sm list-group-tree" id="list-group-men"-->
+<!--                             data-children=".sub-men">-->
+<!--                            <div class="list-group-collapse sub-men">-->
+<!--                                <a class="list-group-item list-group-item-action" href="#sub-men1"-->
+<!--                                   data-toggle="collapse" aria-expanded="true" aria-controls="sub-men1">Fruits & Drinks-->
+<!--                                    <small class="text-muted">(100)</small>-->
+<!--                                </a>-->
+<!--                                <div class="collapse show" id="sub-men1" data-parent="#list-group-men">-->
+<!--                                    <div class="list-group">-->
+<!--                                        <a href="#" class="list-group-item list-group-item-action active">Fruits 1-->
+<!--                                            <small class="text-muted">(50)</small></a>-->
+<!--                                        <a href="#" class="list-group-item list-group-item-action">Fruits 2 <small-->
+<!--                                                class="text-muted">(10)</small></a>-->
+<!--                                        <a href="#" class="list-group-item list-group-item-action">Fruits 3 <small-->
+<!--                                                class="text-muted">(10)</small></a>-->
+<!--                                        <a href="#" class="list-group-item list-group-item-action">Fruits 4 <small-->
+<!--                                                class="text-muted">(10)</small></a>-->
+<!--                                        <a href="#" class="list-group-item list-group-item-action">Fruits 5 <small-->
+<!--                                                class="text-muted">(20)</small></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="list-group-collapse sub-men">-->
+<!--                                <a class="list-group-item list-group-item-action" href="#sub-men2"-->
+<!--                                   data-toggle="collapse" aria-expanded="false" aria-controls="sub-men2">Vegetables-->
+<!--                                    <small class="text-muted">(50)</small>-->
+<!--                                </a>-->
+<!--                                <div class="collapse" id="sub-men2" data-parent="#list-group-men">-->
+<!--                                    <div class="list-group">-->
+<!--                                        <a href="#" class="list-group-item list-group-item-action">Vegetables 1 <small-->
+<!--                                                class="text-muted">(10)</small></a>-->
+<!--                                        <a href="#" class="list-group-item list-group-item-action">Vegetables 2 <small-->
+<!--                                                class="text-muted">(20)</small></a>-->
+<!--                                        <a href="#" class="list-group-item list-group-item-action">Vegetables 3 <small-->
+<!--                                                class="text-muted">(20)</small></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <a href="#" class="list-group-item list-group-item-action"> Grocery <small-->
+<!--                                    class="text-muted">(150) </small></a>-->
+<!--                            <a href="#" class="list-group-item list-group-item-action"> Grocery <small-->
+<!--                                    class="text-muted">(11)</small></a>-->
+<!--                            <a href="#" class="list-group-item list-group-item-action"> Grocery <small-->
+<!--                                    class="text-muted">(22)</small></a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="filter-price-left">
+                        <div class="title-left">
+                            <h3>Price</h3>
+                        </div>
+
+                        <div class="price-box-slider">
+
+
+                            <div id="slider-range"></div>
+                            <p>
+                                <input type="text" id="amount" name="prize" readonly
+                                       style="border:0; color:#fbb714; font-weight:bold;">
+                                <button class="btn hvr-hover" type="button" id="prizefilter">Filter</button>
+                            </p>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Shop Page -->
+{% include 'statics/script.html' %}
+<script>
+
+$(function() {
+		$("#slider-range").slider({
+			range: true,
+			min: 0,
+			max: 4000,
+			values: [{% if RangeStart %} {{ RangeStart }} {% else %} 0 {% endif %}, {% if RangeEnd %} {{ RangeEnd }} {% else %} 100 {% endif %}],
+			slide: function(event, ui) {
+				$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+			}
+		});
+		$("#amount").val("$" + $("#slider-range").slider("values", 0) +
+			" - $" + $("#slider-range").slider("values", 1));
+	});
+
+<!--Price Range Filter Start-->
+
+      $('#prizefilter').on('click',function(){
+      debugger
+      var alternativefilter = $('#alternativefilter').val()
+      var prizerange = $('#amount').val()
+      var searchfilter = 'None';
+      filters(prizerange,alternativefilter,searchfilter)
+
+      })
+      <!--Price Range filter End-->
+
+      <!--Alternative filterations start-->
+         $('#alternativefilter').on('change',function(){
+              var alternativefilter = $('#alternativefilter').val()
+              var prizerange = $('#amount').val()
+              var searchfilter = 'None';
+              filters(prizerange,alternativefilter,searchfilter)
+         });
+    <!--Alternative filterations End-->
+
+<!--    searchfilter start-->
+    $('#searchbtn').on('click',function(){
+    var alternativefilter = $('#alternativefilter').val()
+    var prizerange = $('#amount').val()
+    var searchfilter = $('#searchfilters').val();
+    filters(prizerange,alternativefilter,searchfilter)
+
+    })
+
+<!--    searchfilter End-->
+
+
+<!--Common Filter Function Start -->
+
+
+      function filters(prizerange,alternativefilters,searchfilter)
+      {
+
+      var baseurl = "{{ request.path }}"
+      var prizerange = prizerange
+
+      var alternativefilter = alternativefilters
+      var searchfilter = searchfilter
+      var form_data = new FormData();
+
+      form_data.append("prize", prizerange);
+      form_data.append("alternativefilter",alternativefilter);
+      form_data.append("searchfilter",searchfilter);
+        var csrftoken = $('meta[name=csrf-token]').attr('content');
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                }
+            }
+        });
+
+        $.ajax({
+            url: baseurl,
+            type: 'POST',
+            data: form_data,
+            dataype: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (responsedata) {
+            debugger
+            console.log(responsedata.Alternativefilter)
+                $('#list-view').html('');
+                $('#inside-grid-view').html('');
+                var count = responsedata.count
+                var data = responsedata.products
+                $('#alternativefilter').val(responsedata.Alternativefilter);
+                console.log($('#alternativefilter').val(responsedata.Alternativefilter))
+                $('#countdata').html('')
+                $('#searchfilters').val('');
+
+                $('#countdata').html("Showing all "+count+" results")
+
+                $.each(data, function (key, value) {
+                var origin   = window.location.origin;
+
+                var slugurl = origin+'/product/induvialProduct/'+value['slug']
+                var html ="<div class='list-view-box'><div class='row'><div class='col-sm-6 col-md-6 col-lg-4 col-xl-4'><div class='products-single fix'><div class='box-img-hover'><div class='type-lb'><p class="+ value['Offer'] +">"+value['Offer']+"</p></div><img src="+value['ProductImage']+" class='img-fluid' alt='Image'><div class='mask-icon'><ul><li><a href="+slugurl+" data-toggle='tooltip' data-placement='right' title='View'><i class='fas fa-eye'></i></a></li><li><a href='#' data-toggle='tooltip' data-placement='right' title='Compare'><i class='fas fa-sync-alt'></i></a></li><li><a href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist'><i class='far fa-heart'></i></a></li></ul></div></div></div></div><div class='col-sm-6 col-md-6 col-lg-8 col-xl-8'><div class='why-text full-width'><h4>"+value['ProductTitle']+"</h4><h4><del>"+value['StrikePrice']+"</del></h4><h5>"+value['Price']+"</h5><p>"+value['Description']+"</p><button class='btn cart hvr-hover' value="+value['slug']+">Add to Cart</button></div></div></div></div>"
+                var gridview = "<div class='col-sm-6 col-md-6 col-lg-4 col-xl-4'><div class='products-single fix'><div class='box-img-hover'><div class='type-lb'><p class="+ value['Offer'] +">"+ value['Offer'] +"</p></div><img src="+value['ProductImage']+" class='img-fluid' alt='Image'><div class='mask-icon'><ul><li><a href="+slugurl+" data-toggle='tooltip' data-placement='right' title='View'><i class='fas fa-eye'></i></a></li><li><a href='#' data-toggle='tooltip' data-placement='right' title='Compare'><i class='fas fa-sync-alt'></i></a></li><li><a href='#' data-toggle='tooltip' data-placement='right' title='Add to Wishlist'><i class='far fa-heart'></i></a></li></ul><button class='btn cart hvr-hover' value="+value['slug']+">Add to Cart</button></div></div><div class='why-text'><h4>"+value['ProductTitle']+"</h4><h4><del>"+value['StrikePrice']+"</del></h4><h5>"+value['Price']+"</h5></div></div></div>"
+                console.log(gridview)
+                $('#list-view').append(html);
+                $('#inside-grid-view').append(gridview);
+
+                });
+
+                },
+            error: function(data){
+            }
+            });
+
+
+      }
+      <!--Common Filter Function End -->
+
+
+
+
+</script>
+{% endblock content %}

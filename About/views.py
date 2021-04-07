@@ -19,3 +19,4 @@ class Aboutview(ListView):
         context = super(Aboutview,self).get_context_data(*args,**kwargs)
 
         return context
+

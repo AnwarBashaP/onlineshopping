@@ -4,6 +4,7 @@ from decimal import Decimal
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
 from six import text_type
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -128,47 +129,48 @@ def whishlistView(request):
 @permission_classes((AllowAny,))
 @csrf_exempt
 # @permission_classes([IsAuthenticated])
+# @require_http_methods([ "POST"])
 def AddToCart(request, slug):
-    UserSession = request.session['token']
+    try:
+        token = Token.objects.get(key=request.session['token'])
+        if slug != "None":
+            CartData = CartModel.objects.filter(User=User.objects.get(pk=token.user_id)).all()
 
-    token = Token.objects.get(key=request.session['token'])
-    if slug != "None":
-        CartData = CartModel.objects.filter(User=User.objects.get(pk=token.user_id)).all()
+            if CartData:
+                preOrder = CartData.filter(ProductID=ProductDetails.objects.get(slug=slug)).values('Total')
+                if preOrder:
+                    Total = preOrder[0]['Total'] + 1
 
-        if CartData:
-            preOrder = CartData.filter(ProductID=ProductDetails.objects.get(slug=slug)).values('Total')
-            if preOrder:
-                Total = preOrder[0]['Total'] + 1
+                    preOrder.update(Total=Total)
+                else:
+                    CartData.create(User=User.objects.get(pk=token.user_id), ProductID=ProductDetails.objects.get(slug=slug),
+                                    Total=1)
 
-                preOrder.update(Total=Total)
             else:
+
                 CartData.create(User=User.objects.get(pk=token.user_id), ProductID=ProductDetails.objects.get(slug=slug),
                                 Total=1)
 
+            CartDataCount = CartModel.objects.filter(User=User.objects.get(pk=token.user_id)).count()
+            return JsonResponse({"Count": CartDataCount,  "status": "pass"})
         else:
+            OutputData = []
+            CartDataProduct = CartModel.objects.filter(User=User.objects.get(pk=token.user_id)).values(
+                'ProductID__ProductTitle', 'Total', 'ProductID__Price', 'ProductID__slug','ProductID__ProductImage')
+            priceamount = []
+            checkouttotal = []
+            for i in CartDataProduct:
+                priceamount.append(int(i['ProductID__Price']))
+                totalprice = int(i['Total'])*int(i['ProductID__Price'])
+                checkouttotal.append(int(i['Total'])*int(i['ProductID__Price']))
+                OutputData.append(
+                    {"ProductTitle": i['ProductID__ProductTitle'], "Total": i['Total'], "Price": i['ProductID__Price'],
+                     "slug": i['ProductID__slug'],"ProductImage":"media/"+i['ProductID__ProductImage'],"TotalPriceAmount":totalprice})
+            print(checkouttotal)
+            return JsonResponse({"OutputData": OutputData,"Totalamount":sum(priceamount),"Checkout":sum(checkouttotal), "status": "pass"})
 
-            CartData.create(User=User.objects.get(pk=token.user_id), ProductID=ProductDetails.objects.get(slug=slug),
-                            Total=1)
-
-        CartDataCount = CartModel.objects.filter(User=User.objects.get(pk=token.user_id)).count()
-        return JsonResponse({"Count": CartDataCount,  "status": "pass"})
-    else:
-        OutputData = []
-        CartDataProduct = CartModel.objects.filter(User=User.objects.get(pk=token.user_id)).values(
-            'ProductID__ProductTitle', 'Total', 'ProductID__Price', 'ProductID__slug','ProductID__ProductImage')
-        priceamount = []
-        checkouttotal = []
-        for i in CartDataProduct:
-            priceamount.append(int(i['ProductID__Price']))
-            totalprice = int(i['Total'])*int(i['ProductID__Price'])
-            checkouttotal.append(int(i['Total'])*int(i['ProductID__Price']))
-            OutputData.append(
-                {"ProductTitle": i['ProductID__ProductTitle'], "Total": i['Total'], "Price": i['ProductID__Price'],
-                 "slug": i['ProductID__slug'],"ProductImage":"media/"+i['ProductID__ProductImage'],"TotalPriceAmount":totalprice})
-        print(checkouttotal)
-        return JsonResponse({"OutputData": OutputData,"Totalamount":sum(priceamount),"Checkout":sum(checkouttotal), "status": "pass"})
-
-
+    except:
+        return JsonResponse({"message":"Success"})
 
 
 

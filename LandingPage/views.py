@@ -51,6 +51,9 @@ def User_LogoutAPIView(request):
 #     # filter_fields = ('FilesName' ,'return_id__ReturnId')
 
 
+def homepageview(request):
+
+    return redirect('/home')
 def LandPageView(request):
     template_name = 'index.html'
     # try:

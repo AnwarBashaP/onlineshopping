@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 
@@ -61,3 +62,9 @@ class LoginApiview(APIView):
         data['email'] =Uid['email']
         data['token'] =token.key
         return Response(data)
+
+def ContactUsView(request):
+    template_name = 'contact-us.html'
+    # try:
+
+    return render(request, template_name)

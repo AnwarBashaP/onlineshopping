@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
     'rest_framework',
-    'whitenoise.runserver_nostatic',
+
     # Installed Apps
     'Ecommerce',
     'Home',
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 AUTHENTICATION_BACKENDS = (
     ('django.contrib.auth.backends.ModelBackend'),
@@ -175,12 +177,13 @@ DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR,"static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "assests")
+STATICFILES_DIRS = (
+  os.path.join(BASE_DIR, 'static'),
+                    )
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
